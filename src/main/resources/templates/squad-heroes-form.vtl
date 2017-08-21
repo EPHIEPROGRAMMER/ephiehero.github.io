@@ -1,0 +1,18 @@
+<h1>Add a hero to $squad.getSquadName()</h1>
+
+<form action="/heroes" method="post">
+  <input id="squadId" name="squadId" type="hidden" value="$squad.getId()">
+
+  <label for="name"></label>
+  <input id="name" name="name" type="text">
+
+  <label for="age"></label>
+  <input id="age" name="age" type="text">
+
+  <label for="strength"></label>
+  <input id="strength" name="strength" type="text">
+
+  <label for="weakness"></label>
+  <input id="weakness" name="weakness" type="text">
+  <button type="submit" class="btn btn-success">Add Hero</button>
+</form>
