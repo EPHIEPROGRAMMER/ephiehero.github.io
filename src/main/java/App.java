@@ -72,7 +72,7 @@ public class App {
 
   post("/heroes", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
-      
+
     String name = request.queryParams("name");
     int age = Integer.parseInt(request.queryParams("age"));
     String strength = request.queryParams("strength");
@@ -83,6 +83,14 @@ public class App {
     model.put("template", "templates/success.vtl");
     return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
+
+    post("/squads", (request, response) -> {
+        Map<String, Object> model = new HashMap<String, Object>();
+        String name = request.queryParams("name");
+        Squad newSquad = new Squad(name);
+        model.put("template", "templates/squad-success.vtl");
+        return new ModelAndView(model, layout);
+      }, new VelocityTemplateEngine());
 
 
 
