@@ -6,13 +6,21 @@ import spark.ModelAndView;
 import spark.template.velocity.VelocityTemplateEngine;
 import static spark.Spark.*;
 
-//to enhance access to public folder
+/to enhance access to public folder
 public class App {
   public static void main(String[] args) {
     staticFileLocation("/public");
     // to enhance routing from layout.vtl which has the layout structure of the project
+    String layout = "templates/layout.vtl";
+    ProcessBuilder process = new ProcessBuilder();
+     Integer port;
+     if (process.environment().get("PORT") != null) {
+         port = Integer.parseInt(process.environment().get("PORT"));
+     } else {
+         port = 4567;
+     }
 
-
+    setPort(port);
     get("/", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("heroes", request.session().attribute("heroes"));
@@ -91,6 +99,28 @@ public class App {
         model.put("template", "templates/squad-success.vtl");
         return new ModelAndView(model, layout);
       }, new VelocityTemplateEngine());
+
+      post("/heroes", (request, response) -> {
+Map<String, Object> model = new HashMap<String, Object>();
+
+Squad squad = Squad.find(Integer.parseInt(request.queryParams("squadId")));
+
+String name = request.queryParams("name");
+int age = Integer.parseInt(request.queryParams("age"));
+String strength = request.queryParams("strength");
+String weakness = request.queryParams("weakness");
+Hero newHero = new Hero(name, age, strength, weakness);
+
+squad.addHero(newHero);
+
+model.put("squad", squad);
+model.put("template", "templates/squad-heroes-success.vtl");
+return new ModelAndView(model, layout);
+}, new VelocityTemplateEngine());
+
+}
+}
+
 
 
 
