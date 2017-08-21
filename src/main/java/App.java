@@ -70,6 +70,21 @@ public class App {
     return new ModelAndView(model, layout);
   }, new VelocityTemplateEngine());
 
+  post("/heroes", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      
+    String name = request.queryParams("name");
+    int age = Integer.parseInt(request.queryParams("age"));
+    String strength = request.queryParams("strength");
+    String weakness = request.queryParams("weakness");
+    Hero newHero = new Hero(name, age, strength, weakness);
+    // heroes.add(newHero);
+
+    model.put("template", "templates/success.vtl");
+    return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+
 
 
 
