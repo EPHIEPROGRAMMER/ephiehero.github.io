@@ -6,7 +6,7 @@ import spark.ModelAndView;
 import spark.template.velocity.VelocityTemplateEngine;
 import static spark.Spark.*;
 
-/to enhance access to public folder
+//to enhance access to public folder
 public class App {
   public static void main(String[] args) {
     staticFileLocation("/public");
@@ -21,6 +21,7 @@ public class App {
      }
 
     setPort(port);
+
     get("/", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("heroes", request.session().attribute("heroes"));
@@ -35,11 +36,11 @@ public class App {
     }, new VelocityTemplateEngine());
 
     get("/heroes", (request, response) -> {
-    Map<String, Object> model = new HashMap<String, Object>();
-    model.put("heroes", Hero.all());
-    model.put("template", "templates/heroes.vtl");
-    return new ModelAndView(model, layout);
-  }, new VelocityTemplateEngine());
+      Map<String, Object> model = new HashMap<String, Object>();
+      model.put("heroes", Hero.all());
+      model.put("template", "templates/heroes.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
 
   get("/heroes/:id", (request, response) -> {
     HashMap<String, Object> model = new HashMap<String, Object>();
@@ -78,8 +79,14 @@ public class App {
     return new ModelAndView(model, layout);
   }, new VelocityTemplateEngine());
 
-  post("/heroes", (request, response) -> {
+    post("/heroes", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
+
+    // ArrayList<Hero> heroes = request.session().attribute("heroes");
+    // if (heroes == null) {
+    // heroes = new ArrayList<Hero>();
+    // request.session().attribute("heroes", heroes);
+    // }
 
     String name = request.queryParams("name");
     int age = Integer.parseInt(request.queryParams("age"));
@@ -92,43 +99,31 @@ public class App {
     return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
-    post("/squads", (request, response) -> {
-        Map<String, Object> model = new HashMap<String, Object>();
-        String name = request.queryParams("name");
-        Squad newSquad = new Squad(name);
-        model.put("template", "templates/squad-success.vtl");
-        return new ModelAndView(model, layout);
-      }, new VelocityTemplateEngine());
+  post("/squads", (request, response) -> {
+    Map<String, Object> model = new HashMap<String, Object>();
+    String name = request.queryParams("name");
+    Squad newSquad = new Squad(name);
+    model.put("template", "templates/squad-success.vtl");
+    return new ModelAndView(model, layout);
+  }, new VelocityTemplateEngine());
 
-      post("/heroes", (request, response) -> {
-Map<String, Object> model = new HashMap<String, Object>();
+  post("/heroes", (request, response) -> {
+  Map<String, Object> model = new HashMap<String, Object>();
 
-Squad squad = Squad.find(Integer.parseInt(request.queryParams("squadId")));
+  Squad squad = Squad.find(Integer.parseInt(request.queryParams("squadId")));
 
-String name = request.queryParams("name");
-int age = Integer.parseInt(request.queryParams("age"));
-String strength = request.queryParams("strength");
-String weakness = request.queryParams("weakness");
-Hero newHero = new Hero(name, age, strength, weakness);
+  String name = request.queryParams("name");
+  int age = Integer.parseInt(request.queryParams("age"));
+  String strength = request.queryParams("strength");
+  String weakness = request.queryParams("weakness");
+  Hero newHero = new Hero(name, age, strength, weakness);
 
-squad.addHero(newHero);
+  squad.addHero(newHero);
 
-model.put("squad", squad);
-model.put("template", "templates/squad-heroes-success.vtl");
-return new ModelAndView(model, layout);
+  model.put("squad", squad);
+  model.put("template", "templates/squad-heroes-success.vtl");
+  return new ModelAndView(model, layout);
 }, new VelocityTemplateEngine());
-
-}
-}
-
-
-
-
-
-
-
-
-
 
   }
 }
