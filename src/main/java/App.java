@@ -9,18 +9,20 @@ import static spark.Spark.*;
 //to enhance access to public folder
 public class App {
   public static void main(String[] args) {
+
+    ProcessBuilder process = new ProcessBuilder();
+    Integer port;
+    if (process.environment().get("PORT") != null) {
+        port = Integer.parseInt(process.environment().get("PORT"));
+    } else {
+        port = 4567;
+    }
+
+   setPort(port);
     staticFileLocation("/public");
     // to enhance routing from layout.vtl which has the layout structure of the project
     String layout = "templates/layout.vtl";
-    ProcessBuilder process = new ProcessBuilder();
-     Integer port;
-     if (process.environment().get("PORT") != null) {
-         port = Integer.parseInt(process.environment().get("PORT"));
-     } else {
-         port = 4567;
-     }
-
-    setPort(port);
+    
 
     get("/", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
